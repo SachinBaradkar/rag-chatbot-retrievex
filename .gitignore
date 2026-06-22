@@ -1,0 +1,17 @@
+﻿.env
+venv/
+__pycache__/
+*.py[cod]
+uploads/*
+!uploads/.gitkeep
+data/*
+!data/.gitkeep
+vectordb/*
+!vectordb/.gitkeep
+chroma.sqlite3
+*.sqlite3
+manifest.json
+sample_docs/*.pdf
+*.pdf
+# ChromaDB segment folders (UUID named)
+[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]-*/
