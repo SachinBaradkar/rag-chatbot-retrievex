@@ -156,7 +156,7 @@ with st.sidebar:
         st.session_state.last_sources = []
         st.rerun()
 
-    st.caption("© 2024 Retrievex · Portfolio Project")
+    st.caption("Retrievex · Sachin Baradkar")
 
 
 # ── Main area ─────────────────────────────────────────────────────────────────
