@@ -25,7 +25,6 @@ from app.utils.helpers import truncate, setup_logging
 
 setup_logging()
 
-# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Retrievex",
     page_icon="⚡",
@@ -33,18 +32,26 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-.block-container {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-}
+/* Hide default streamlit header completely */
 header[data-testid="stHeader"] {
-    height: 2.5rem;
+    height: 0rem !important;
+    display: none !important;
 }
-.stChatMessage { border-radius: 12px; margin-bottom: 0.5rem; }
-
+/* Remove all top/bottom padding */
+.block-container {
+    padding-top: 0.3rem !important;
+    padding-bottom: 0.2rem !important;
+}
+/* Remove top margin from first element */
+.stMainBlockContainer > div:first-child {
+    margin-top: 0 !important;
+}
+.stChatMessage {
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+}
 .source-card {
     background: #1e1e2e;
     border: 1px solid #313244;
@@ -64,7 +71,8 @@ header[data-testid="stHeader"] {
 }
 .main-header {
     text-align: center;
-    padding: 0.3rem 0 0.2rem 0;
+    padding: 0.2rem 0 0.1rem 0;
+    margin-bottom: 0.3rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -138,8 +146,8 @@ with st.sidebar:
 
     st.divider()
     st.markdown("### Settings")
-    top_k       = st.slider("Results to retrieve (K)", min_value=1, max_value=10, value=5)
-    use_rerank  = st.checkbox("Enable reranking", value=True)
+    top_k      = st.slider("Results to retrieve (K)", min_value=1, max_value=10, value=5)
+    use_rerank = st.checkbox("Enable reranking", value=True)
     show_chunks = st.checkbox("Show retrieved chunks", value=True)
 
     st.divider()
@@ -153,7 +161,7 @@ with st.sidebar:
 
 # ── Main area ─────────────────────────────────────────────────────────────────
 st.markdown(
-    "<div class='main-header' style='padding-top:1.5rem;'><h2>Retrievex</h2>"
+    "<div class='main-header'><h2>Retrievex</h2>"
     "<p style='margin:0;color:#888;font-size:0.9rem;'>Answers from your documents, instantly</p></div>",
     unsafe_allow_html=True,
 )
@@ -161,12 +169,13 @@ st.markdown(
 col_chat, col_sources = st.columns([5, 1.5])
 
 with col_chat:
-    chat_container = st.container(height=450)
+    # Height tuned so chat input is always visible without scrolling
+    chat_container = st.container(height=390)
     with chat_container:
         if not st.session_state.messages:
             st.markdown(
                 """
-                <div style="text-align:center; padding:2rem; color:#888;">
+                <div style="text-align:center; padding:1.5rem; color:#888;">
                 <h4>Welcome to Retrievex</h4>
                 <p>Upload documents in the sidebar, then ask questions here.</p>
                 </div>
