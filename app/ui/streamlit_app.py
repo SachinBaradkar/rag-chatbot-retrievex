@@ -29,29 +29,44 @@ st.set_page_config(
     page_title="Retrievex",
     page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 st.markdown("""
 <style>
-/* Hide default streamlit header completely */
-header[data-testid="stHeader"] {
-    height: 0rem !important;
-    display: none !important;
+/* ── Show sidebar toggle button always (critical for mobile) ── */
+[data-testid="collapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+    z-index: 9999 !important;
+    background: #1e1e2e !important;
+    border-radius: 6px !important;
+    padding: 4px !important;
 }
-/* Remove all top/bottom padding */
+
+/* ── Header ── */
+header[data-testid="stHeader"] {
+    height: 2.5rem !important;
+    background: transparent !important;
+}
+
+/* ── Main container padding ── */
 .block-container {
-    padding-top: 0.3rem !important;
+    padding-top: 1rem !important;
     padding-bottom: 0.2rem !important;
 }
-/* Remove top margin from first element */
-.stMainBlockContainer > div:first-child {
-    margin-top: 0 !important;
-}
+
+/* ── Chat messages ── */
 .stChatMessage {
     border-radius: 12px;
     margin-bottom: 0.5rem;
 }
+
+/* ── Source card ── */
 .source-card {
     background: #1e1e2e;
     border: 1px solid #313244;
@@ -61,6 +76,8 @@ header[data-testid="stHeader"] {
     font-size: 0.85rem;
     line-height: 1.5;
 }
+
+/* ── Document chip ── */
 .doc-chip {
     background: #181825;
     border: 1px solid #45475a;
@@ -69,10 +86,20 @@ header[data-testid="stHeader"] {
     margin-bottom: 0.3rem;
     font-size: 0.82rem;
 }
+
+/* ── Main header ── */
 .main-header {
     text-align: center;
     padding: 0.2rem 0 0.1rem 0;
     margin-bottom: 0.3rem;
+}
+
+/* ── Mobile responsive: stack columns ── */
+@media (max-width: 768px) {
+    .block-container {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -146,8 +173,8 @@ with st.sidebar:
 
     st.divider()
     st.markdown("### Settings")
-    top_k      = st.slider("Results to retrieve (K)", min_value=1, max_value=10, value=5)
-    use_rerank = st.checkbox("Enable reranking", value=True)
+    top_k       = st.slider("Results to retrieve (K)", min_value=1, max_value=10, value=5)
+    use_rerank  = st.checkbox("Enable reranking", value=True)
     show_chunks = st.checkbox("Show retrieved chunks", value=True)
 
     st.divider()
@@ -169,7 +196,6 @@ st.markdown(
 col_chat, col_sources = st.columns([5, 1.5])
 
 with col_chat:
-    # Height tuned so chat input is always visible without scrolling
     chat_container = st.container(height=390)
     with chat_container:
         if not st.session_state.messages:
